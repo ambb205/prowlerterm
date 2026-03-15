@@ -6,6 +6,7 @@ import HeroImage from '../../components/HeroImage.astro';
 import DownloadTable from '../../components/DownloadTable.astro';
 import InstallCommands from '../../components/InstallCommands.astro';
 import ProjectLinks from '../../components/ProjectLinks.astro';
+import MediaGallery from '../../components/MediaGallery.astro';
 import TagList from '../../components/TagList.astro';
 import { renderMarkdown } from '../../utils/markdown';
 
@@ -42,6 +43,10 @@ const descriptionHtml = renderMarkdown(project.description);
     </header>
 
     <section class="description" set:html={descriptionHtml} />
+
+    {project.media && project.media.length > 0 && (
+      <MediaGallery media={project.media} slug={project.slug} />
+    )}
 
     <DownloadTable
       platforms={project.platforms}
