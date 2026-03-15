@@ -54,9 +54,15 @@ projects.sort(
   }
 
   .projects-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 1.5rem;
     padding-bottom: 2rem;
+  }
+
+  .projects-grid > :global(*) {
+    width: 100%;
+    max-width: 400px;
   }
 </style>
