@@ -1,0 +1,167 @@
+---
+import { getCollection } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
+import Base from '../../layouts/Base.astro';
+import HeroImage from '../../components/HeroImage.astro';
+import DownloadTable from '../../components/DownloadTable.astro';
+import InstallCommands from '../../components/InstallCommands.astro';
+import ProjectLinks from '../../components/ProjectLinks.astro';
+import TagList from '../../components/TagList.astro';
+import { renderMarkdown } from '../../utils/markdown';
+
+export const getStaticPaths = (async () => {
+  const projects = await getCollection('projects');
+  return projects.map((project) => ({
+    params: { slug: project.id },
+    props: { project: project.data },
+  }));
+}) satisfies GetStaticPaths;
+
+const { project } = Astro.props;
+const descriptionHtml = renderMarkdown(project.description);
+---
+
+<Base title={`${project.displayName} | prowler`} description={project.tagline}>
+  <article class="project-page container" style={`--accent: ${project.accent}`}>
+
+    <a href="/" class="back-link">&larr; back</a>
+
+    <HeroImage
+      slug={project.slug}
+      image={project.hero.image}
+      alt={project.hero.alt}
+    />
+
+    <header class="project-header">
+      <h1>{project.displayName}</h1>
+      <p class="tagline">{project.tagline}</p>
+      <div class="project-meta">
+        <span class="version">v{project.version}</span>
+        <TagList tags={project.tags} />
+      </div>
+    </header>
+
+    <section class="description" set:html={descriptionHtml} />
+
+    <DownloadTable
+      platforms={project.platforms}
+      slug={project.slug}
+      version={project.version}
+    />
+
+    {project.install && (
+      <InstallCommands install={project.install} />
+    )}
+
+    {project.links && (
+      <ProjectLinks links={project.links} />
+    )}
+
+  </article>
+</Base>
+
+<style>
+  .project-page {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+
+  .back-link {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+    transition: color 0.2s;
+    animation: fade-in 0.4s ease-out;
+  }
+
+  .back-link:hover {
+    color: var(--purple);
+  }
+
+  .project-header {
+    margin-top: 2.5rem;
+    animation: fade-up 0.5s ease-out backwards;
+    animation-delay: 0.1s;
+  }
+
+  .project-header h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+  }
+
+  .tagline {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    margin-top: 0.5rem;
+    line-height: 1.5;
+  }
+
+  .project-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+
+  .version {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--purple);
+    font-weight: 600;
+  }
+
+  .description {
+    margin-top: 2.5rem;
+    line-height: 1.8;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    animation: fade-up 0.5s ease-out backwards;
+    animation-delay: 0.15s;
+  }
+
+  .description :global(p) {
+    margin-bottom: 1rem;
+  }
+
+  .description :global(strong) {
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .description :global(a) {
+    color: var(--purple);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: rgba(168, 85, 247, 0.3);
+    transition: text-decoration-color 0.2s;
+  }
+
+  .description :global(a:hover) {
+    text-decoration-color: var(--purple);
+  }
+
+  .description :global(code) {
+    background: var(--bg-elevated);
+    padding: 0.15em 0.45em;
+    border-radius: 4px;
+    font-size: 0.85em;
+    border: 1px solid var(--border);
+  }
+
+  .description :global(ul),
+  .description :global(ol) {
+    padding-left: 1.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .description :global(li) {
+    margin-bottom: 0.35rem;
+    color: var(--text-secondary);
+  }
+
+  .description :global(li strong),
+  .description :global(li code) {
+    color: var(--text-primary);
+  }
+</style>

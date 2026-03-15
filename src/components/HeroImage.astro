@@ -1,0 +1,31 @@
+---
+interface Props {
+  slug: string;
+  image: string;
+  alt: string;
+}
+
+const { slug, image, alt } = Astro.props;
+---
+
+<div class="hero-image">
+  <img src={`/dl/${slug}/${image}`} alt={alt} />
+</div>
+
+<style>
+  .hero-image {
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    box-shadow:
+      0 4px 32px rgba(124, 58, 237, 0.08),
+      0 0 0 1px rgba(168, 85, 247, 0.05);
+    animation: fade-up 0.5s ease-out backwards;
+  }
+
+  .hero-image img {
+    width: 100%;
+    max-height: 500px;
+    object-fit: cover;
+  }
+</style>

@@ -1,0 +1,49 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+
+const projects = await getCollection('projects');
+
+projects.sort(
+  (a, b) => new Date(b.data.released).getTime() - new Date(a.data.released).getTime()
+);
+---
+
+<Base title="prowler | software">
+  <section class="hero-section container">
+    <img src="/prowler.png" alt="Prowler logo" class="hero-logo" />
+  </section>
+
+  <section class="projects-grid container">
+    {projects.map((project, i) => (
+      <ProjectCard project={project.data} index={i} />
+    ))}
+  </section>
+</Base>
+
+<style>
+  .hero-section {
+    padding: 4rem 2rem 3rem;
+    text-align: center;
+    animation: fade-in 0.6s ease-out;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hero-logo {
+    width: 160px;
+    height: 160px;
+    border-radius: 24px;
+    filter: drop-shadow(0 0 40px rgba(168, 85, 247, 0.3));
+    margin-bottom: 1.5rem;
+  }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 1.5rem;
+    padding-bottom: 2rem;
+  }
+</style>
