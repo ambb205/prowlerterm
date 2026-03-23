@@ -1,0 +1,87 @@
+---
+interface Props {
+  title: string;
+  open?: boolean;
+  index?: number;
+}
+
+const { title, open = false, index = 0 } = Astro.props;
+---
+
+<details class="accordion" open={open} style={`--i: ${index}`}>
+  <summary class="accordion-trigger">
+    <span class="accordion-title">{title}</span>
+    <svg class="accordion-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="6 9 12 15 18 9" />
+    </svg>
+  </summary>
+  <div class="accordion-content">
+    <slot />
+  </div>
+</details>
+
+<style>
+  .accordion {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--bg-surface);
+    overflow: hidden;
+    animation: fade-up 0.4s ease-out backwards;
+    animation-delay: calc(var(--i) * 0.06s);
+  }
+
+  .accordion + .accordion {
+    margin-top: 0.5rem;
+  }
+
+  .accordion-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    cursor: pointer;
+    user-select: none;
+    list-style: none;
+    transition: background 0.2s;
+  }
+
+  .accordion-trigger::-webkit-details-marker {
+    display: none;
+  }
+
+  .accordion-trigger::marker {
+    display: none;
+    content: '';
+  }
+
+  .accordion-trigger:hover {
+    background: var(--bg-elevated);
+  }
+
+  .accordion-title {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-secondary);
+  }
+
+  .accordion-chevron {
+    color: var(--text-secondary);
+    transition: transform 0.25s ease;
+    flex-shrink: 0;
+  }
+
+  .accordion[open] .accordion-chevron {
+    transform: rotate(180deg);
+  }
+
+  .accordion[open] .accordion-title {
+    color: var(--purple);
+  }
+
+  .accordion-content {
+    padding: 0 1.25rem 1.25rem;
+  }
+</style>

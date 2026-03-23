@@ -3,20 +3,20 @@
    ------------------------------------------------ */
 
 :root {
-  --bg:            #0a0814;
-  --bg-surface:    #110e20;
-  --bg-elevated:   #18142c;
-  --text-primary:  #ece8f4;
-  --text-secondary:#8678a8;
-  --border:        #221b44;
-  --purple:        #b46efe;
+  --bg:            #09090b;
+  --bg-surface:    #111113;
+  --bg-elevated:   #1a1a1d;
+  --text-primary:  #fafafa;
+  --text-secondary:#71717a;
+  --border:        #27272a;
+  --purple:        #a855f7;
   --purple-deep:   #8b5cf6;
-  --purple-muted:  #7a4de0;
-  --purple-soft:   rgba(180, 110, 254, 0.08);
+  --purple-muted:  #7c3aed;
+  --purple-soft:   rgba(168, 85, 247, 0.06);
   --font-display:  'Syne Variable', 'Syne', sans-serif;
   --font-body:     'Outfit Variable', 'Outfit', system-ui, sans-serif;
   --font-mono:     'JetBrains Mono', ui-monospace, 'Cascadia Code', monospace;
-  --accent:        #c084fc;
+  --accent:        #a855f7;
 }
 
 *,
@@ -43,19 +43,7 @@ body {
   overflow-x: hidden;
 }
 
-/* — ambient purple orbs — */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background:
-    radial-gradient(ellipse 60% 50% at 15% -10%, rgba(139, 92, 246, 0.14) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 60% at 85% 110%, rgba(180, 110, 254, 0.09) 0%, transparent 60%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* — grain overlay — */
+/* — subtle grain overlay — */
 body::after {
   content: '';
   position: fixed;
@@ -65,7 +53,7 @@ body::after {
   background-size: 256px 256px;
   pointer-events: none;
   z-index: 9999;
-  opacity: 0.5;
+  opacity: 0.25;
 }
 
 /* — typography — */

@@ -1,0 +1,90 @@
+---
+import type { Theme } from '../schemas/release';
+
+interface Props {
+  themes: Theme[];
+  slug: string;
+}
+
+const { themes, slug } = Astro.props;
+---
+
+{themes.length > 0 && (
+  <div class="theme-grid">
+    {themes.map((theme, i) => (
+      <figure class="theme-card" style={`--i: ${i}`}>
+        <div class="theme-image-wrap">
+          <img
+            src={`/dl/${slug}/${theme.image}`}
+            alt={`${theme.name} theme`}
+            loading="lazy"
+          />
+        </div>
+        <figcaption class="theme-info">
+          <span class="theme-name">{theme.name}</span>
+          {theme.caption && (
+            <span class="theme-caption">{theme.caption}</span>
+          )}
+        </figcaption>
+      </figure>
+    ))}
+  </div>
+)}
+
+<style>
+  .theme-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+
+  .theme-card {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--bg-elevated);
+    transition: border-color 0.2s, transform 0.2s;
+    animation: fade-up 0.35s ease-out backwards;
+    animation-delay: calc(var(--i) * 0.06s);
+  }
+
+  .theme-card:hover {
+    border-color: #3f3f46;
+    transform: translateY(-2px);
+  }
+
+  .theme-image-wrap {
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .theme-image-wrap img {
+    width: 100%;
+    display: block;
+    object-fit: cover;
+    transition: transform 0.35s ease;
+  }
+
+  .theme-card:hover .theme-image-wrap img {
+    transform: scale(1.03);
+  }
+
+  .theme-info {
+    padding: 0.75rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .theme-name {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .theme-caption {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+  }
+</style>

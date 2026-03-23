@@ -24,7 +24,7 @@ export default defineConfig({
   vite: {
     server: {
       fs: {
-        allow: [projectsDir],
+        allow: [projectsDir, '.'],
       },
     },
     plugins: [

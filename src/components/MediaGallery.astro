@@ -10,45 +10,32 @@ const { media, slug } = Astro.props;
 ---
 
 {media.length > 0 && (
-  <section class="media">
-    <h3>Media</h3>
-    <div class="media-grid">
-      {media.map((item, i) => (
-        <figure class="media-item" style={`--i: ${i + 4}`}>
-          {item.type === 'video' ? (
-            <video
-              src={`/dl/${slug}/${item.file}`}
-              controls
-              preload="metadata"
-              playsinline
-            />
-          ) : (
-            <img
-              src={`/dl/${slug}/${item.file}`}
-              alt={item.caption || ''}
-              loading="lazy"
-            />
-          )}
-          {item.caption && (
-            <figcaption>{item.caption}</figcaption>
-          )}
-        </figure>
-      ))}
-    </div>
-  </section>
+  <div class="media-grid">
+    {media.map((item, i) => (
+      <figure class="media-item" style={`--i: ${i}`}>
+        {item.type === 'video' ? (
+          <video
+            src={`/dl/${slug}/${item.file}`}
+            controls
+            preload="metadata"
+            playsinline
+          />
+        ) : (
+          <img
+            src={`/dl/${slug}/${item.file}`}
+            alt={item.caption || ''}
+            loading="lazy"
+          />
+        )}
+        {item.caption && (
+          <figcaption>{item.caption}</figcaption>
+        )}
+      </figure>
+    ))}
+  </div>
 )}
 
 <style>
-  .media {
-    margin-top: 3rem;
-    animation: fade-up 0.5s ease-out backwards;
-    animation-delay: 0.2s;
-  }
-
-  .media h3 {
-    margin-bottom: 1rem;
-  }
-
   .media-grid {
     display: flex;
     flex-direction: column;
@@ -74,7 +61,7 @@ const { media, slug } = Astro.props;
   }
 
   .media-item video:hover {
-    border-color: rgba(168, 85, 247, 0.2);
+    border-color: #3f3f46;
   }
 
   figcaption {

@@ -7,6 +7,8 @@ import DownloadTable from '../../components/DownloadTable.astro';
 import InstallCommands from '../../components/InstallCommands.astro';
 import ProjectLinks from '../../components/ProjectLinks.astro';
 import MediaGallery from '../../components/MediaGallery.astro';
+import ThemeShowcase from '../../components/ThemeShowcase.astro';
+import AccordionSection from '../../components/AccordionSection.astro';
 import TagList from '../../components/TagList.astro';
 import { renderMarkdown } from '../../utils/markdown';
 
@@ -20,6 +22,13 @@ export const getStaticPaths = (async () => {
 
 const { project } = Astro.props;
 const descriptionHtml = renderMarkdown(project.description);
+
+const hasMedia = project.media && project.media.length > 0;
+const hasThemes = project.themes && project.themes.length > 0;
+const hasInstall = project.install && Object.keys(project.install).length > 0;
+const hasLinks = project.links && Object.keys(project.links).length > 0;
+
+let accordionIndex = 0;
 ---
 
 <Base title={`${project.displayName} | prowler`} description={project.tagline}>
@@ -42,25 +51,43 @@ const descriptionHtml = renderMarkdown(project.description);
       </div>
     </header>
 
-    <section class="description" set:html={descriptionHtml} />
+    <div class="accordion-stack">
+      <AccordionSection title="About" open index={accordionIndex++}>
+        <div class="description" set:html={descriptionHtml} />
+      </AccordionSection>
 
-    {project.media && project.media.length > 0 && (
-      <MediaGallery media={project.media} slug={project.slug} />
-    )}
+      {hasMedia && (
+        <AccordionSection title="Media" open index={accordionIndex++}>
+          <MediaGallery media={project.media!} slug={project.slug} />
+        </AccordionSection>
+      )}
 
-    <DownloadTable
-      platforms={project.platforms}
-      slug={project.slug}
-      version={project.version}
-    />
+      {hasThemes && (
+        <AccordionSection title="Themes" index={accordionIndex++}>
+          <ThemeShowcase themes={project.themes!} slug={project.slug} />
+        </AccordionSection>
+      )}
 
-    {project.install && (
-      <InstallCommands install={project.install} />
-    )}
+      <AccordionSection title="Downloads" open index={accordionIndex++}>
+        <DownloadTable
+          platforms={project.platforms}
+          slug={project.slug}
+          version={project.version}
+        />
+      </AccordionSection>
 
-    {project.links && (
-      <ProjectLinks links={project.links} />
-    )}
+      {hasInstall && (
+        <AccordionSection title="Install" index={accordionIndex++}>
+          <InstallCommands install={project.install!} />
+        </AccordionSection>
+      )}
+
+      {hasLinks && (
+        <AccordionSection title="Links" index={accordionIndex++}>
+          <ProjectLinks links={project.links!} />
+        </AccordionSection>
+      )}
+    </div>
 
   </article>
 </Base>
@@ -87,6 +114,7 @@ const descriptionHtml = renderMarkdown(project.description);
 
   .project-header {
     margin-top: 2.5rem;
+    margin-bottom: 2.5rem;
     animation: fade-up 0.5s ease-out backwards;
     animation-delay: 0.1s;
   }
@@ -116,13 +144,16 @@ const descriptionHtml = renderMarkdown(project.description);
     font-weight: 600;
   }
 
+  .accordion-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
   .description {
-    margin-top: 2.5rem;
     line-height: 1.8;
     color: var(--text-primary);
     font-size: 0.95rem;
-    animation: fade-up 0.5s ease-out backwards;
-    animation-delay: 0.15s;
   }
 
   .description :global(p) {

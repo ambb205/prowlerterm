@@ -6,6 +6,12 @@ const mediaSchema = z.object({
   caption: z.string().optional(),
 });
 
+const themeSchema = z.object({
+  name: z.string(),
+  image: z.string(),
+  caption: z.string().optional(),
+});
+
 const platformSchema = z.object({
   os: z.enum(['linux', 'windows', 'macos']),
   arch: z.string(),
@@ -28,6 +34,7 @@ export const releaseSchema = z.object({
   accent: z.string().regex(/^#[0-9a-fA-F]{6}$/),
   platforms: z.array(platformSchema).min(1),
   media: z.array(mediaSchema).optional(),
+  themes: z.array(themeSchema).optional(),
   links: z.record(z.string()).optional(),
   tags: z.array(z.string()).optional(),
   install: z.record(z.string()).optional(),
@@ -36,3 +43,4 @@ export const releaseSchema = z.object({
 export type Release = z.infer<typeof releaseSchema>;
 export type Platform = z.infer<typeof platformSchema>;
 export type Media = z.infer<typeof mediaSchema>;
+export type Theme = z.infer<typeof themeSchema>;
